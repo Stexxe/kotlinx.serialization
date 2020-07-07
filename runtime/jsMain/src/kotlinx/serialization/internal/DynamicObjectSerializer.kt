@@ -1,18 +1,15 @@
-package kotlinx.serialization
+/*
+ * Copyright 2017-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license.
+ */
 
-import kotlinx.serialization.builtins.AbstractEncoder
-import kotlinx.serialization.builtins.list
-import kotlinx.serialization.builtins.nullable
-import kotlinx.serialization.json.JsonConfiguration
-import kotlinx.serialization.json.internal.BEGIN_LIST
-import kotlinx.serialization.json.internal.BEGIN_OBJ
-import kotlinx.serialization.json.internal.END_LIST
-import kotlinx.serialization.json.internal.END_OBJ
-import kotlinx.serialization.modules.EmptyModule
-import kotlinx.serialization.modules.SerialModule
-import kotlinx.serialization.modules.getContextualOrDefault
-import kotlin.math.abs
-import kotlin.math.floor
+package kotlinx.serialization.internal
+
+import kotlinx.serialization.*
+import kotlinx.serialization.builtins.*
+import kotlinx.serialization.json.*
+import kotlinx.serialization.json.internal.*
+import kotlinx.serialization.modules.*
+import kotlin.math.*
 
 
 /**
@@ -35,7 +32,7 @@ import kotlin.math.floor
  *
  * @param encodeNullAsUndefined if true null properties will be omitted from the output
  */
-public class DynamicObjectSerializer @OptIn(UnstableDefault::class) constructor(
+internal class DynamicObjectSerializer @OptIn(UnstableDefault::class) constructor(
     public val context: SerialModule = EmptyModule,
     private val configuration: JsonConfiguration = JsonConfiguration.Default,
     private val encodeNullAsUndefined: Boolean = false
@@ -51,12 +48,6 @@ public class DynamicObjectSerializer @OptIn(UnstableDefault::class) constructor(
         serializer.encode(strategy, obj)
         return serializer.result
     }
-
-    public inline fun <reified T : Any> serialize(obj: T): dynamic =
-        serialize(serializer(), obj)
-
-    public inline fun <reified T : Any> serialize(obj: List<T?>): dynamic =
-        serialize(serializer<T>().nullable.list, obj)
 }
 
 private class DynamicObjectEncoder(val configuration: JsonConfiguration, val encodeNullAsUndefined: Boolean) :
