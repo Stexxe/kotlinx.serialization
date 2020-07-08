@@ -178,6 +178,7 @@ public class JsonBuilder {
     public var unquotedPrint: Boolean = false
     public var indent: String = "    "
     public var coerceInputValues: Boolean = false
+    public var alwaysDropNulls: Boolean = false
     public var useArrayPolymorphism: Boolean = false
     public var classDiscriminator: String = "type"
     public var serialModule: SerialModule = EmptyModule
@@ -193,6 +194,7 @@ public class JsonBuilder {
             unquotedPrint,
             indent,
             coerceInputValues,
+            alwaysDropNulls,
             useArrayPolymorphism,
             classDiscriminator
         )

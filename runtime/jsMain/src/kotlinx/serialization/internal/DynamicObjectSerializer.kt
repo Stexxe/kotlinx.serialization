@@ -29,13 +29,10 @@ import kotlin.math.*
  *  val wrapper = DataWrapper("foo", "bar")
  *  val plainJS: dynamic = DynamicObjectSerializer().serialize(DataWrapper.serializer(), wrapper)
  * ```
- *
- * @param encodeNullAsUndefined if true null properties will be omitted from the output
  */
 internal class DynamicObjectSerializer @OptIn(UnstableDefault::class) constructor(
     public val context: SerialModule = EmptyModule,
-    private val configuration: JsonConfiguration = JsonConfiguration.Default,
-    private val encodeNullAsUndefined: Boolean = false
+    private val configuration: JsonConfiguration = JsonConfiguration.Default
 ) {
 
     public fun <T> serialize(strategy: SerializationStrategy<T>, obj: T): dynamic {
@@ -44,7 +41,7 @@ internal class DynamicObjectSerializer @OptIn(UnstableDefault::class) constructo
             serializer.encode(strategy, obj)
             return serializer.result
         }
-        val serializer = DynamicObjectEncoder(configuration, encodeNullAsUndefined)
+        val serializer = DynamicObjectEncoder(configuration, configuration.alwaysDropNulls)
         serializer.encode(strategy, obj)
         return serializer.result
     }
